@@ -3,6 +3,7 @@
     package="com.plcoding.vaccinationschedule">
 
     <application
+        android:name=".MainActivity"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
@@ -10,7 +11,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.VaccinationSchedule">
         <activity
-            android:name="com.plcoding.vaccinationschedule.MainActivity"
+            android:name="com.plcoding.vaccinationschedule.VaccinationSchedule"
             android:exported="true"
             android:theme="@style/Theme.VaccinationSchedule.NoActionBar">
             <intent-filter>

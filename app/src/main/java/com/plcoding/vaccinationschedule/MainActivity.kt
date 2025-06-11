@@ -1,17 +1,13 @@
 package com.plcoding.vaccinationschedule
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import com.plcoding.vaccinationschedule.ui.theme.VaccinationScheduleTheme
+import android.app.Application
+import dagger.hilt.android.HiltAndroidApp
+import timber.log.Timber
 
-class MainActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContent {
-            VaccinationScheduleTheme {
-
-            }
-        }
+@HiltAndroidApp
+class MainActivity: Application() {
+    override fun onCreate() {
+        super.onCreate()
+        Timber.plant(Timber.DebugTree())
     }
 }
