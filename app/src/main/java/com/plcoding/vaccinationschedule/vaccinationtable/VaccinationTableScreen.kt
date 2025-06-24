@@ -13,34 +13,28 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.material.Button
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Gray
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.plcoding.vaccinationschedule.data.models.Ages
-import com.plcoding.vaccinationschedule.data.models.Diseases
 
 @Composable
 fun VaccinationTableScreen(
     navController: NavController,
-    viewModel: VaccinationTableViewModel = hiltViewModel()
+    viewModel: VaccinationTableViewModel
 ) {
-    Surface(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize()
-        ) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier
                     .padding(top = 10.dp, start = 10.dp, end = 10.dp)
@@ -50,16 +44,15 @@ fun VaccinationTableScreen(
                     modifier = Modifier
                         .border(1.dp, Gray)
                         .width(130.dp)
-                        .height(60.dp)
+                        .height(50.dp)
                 ) {
                     Text(
-                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 20.dp),
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 16.dp),
                         text = "VACUNACIÓN",
                         textAlign = TextAlign.Center
                     )
                 }
-
-                Column(modifier = Modifier.height(60.dp)) {
+                Column(modifier = Modifier.height(50.dp)) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -67,13 +60,13 @@ fun VaccinationTableScreen(
                             .weight(1f)
                             .border(1.dp, Black)
                     ) {
-                        for (age in Ages.entries) {
+                        Ages.entries.forEach { age ->
                             Column(
                                 horizontalAlignment = Alignment.CenterHorizontally,
                                 modifier = Modifier
-                                    .height(60.dp)
                                     .border(1.dp, Gray)
                                     .weight(1f)
+                                    .height(60.dp),
                             ) {
                                 Text(
                                     modifier = Modifier
@@ -88,42 +81,41 @@ fun VaccinationTableScreen(
                     }
                 }
             }
-
             Column(
                 modifier = Modifier
-                    .padding(start = 10.dp, bottom = 8.dp)
-                    .border(1.dp, Black)
+                    .padding(start = 10.dp, bottom = 8.dp, end = 10.dp)
             ) {
-                for (disease in Diseases.entries) {
+                viewModel.diseasesOrder.forEach { disease ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                         modifier = Modifier
-                            .fillMaxSize()
-                            .padding(end = 10.dp)
-                            .border(1.dp, Gray)
                             .weight(1f)
                     ) {
                         Box(
                             modifier = Modifier
                                 .fillMaxHeight()
-                                .background(disease.backgroundColor)
+                                .background(disease.backgroundColor),
+                            contentAlignment = Alignment.Center
                         ) {
                             Text(
                                 modifier = Modifier
                                     .width(130.dp)
-                                    .padding(horizontal = 4.dp, vertical = 12.dp),
+                                    .padding(horizontal = 6.dp, vertical = 4.dp),
                                 text = disease.displayName,
                                 textAlign = TextAlign.Center,
-                                fontSize = 14.sp
+                                fontSize = 12.sp
                             )
                         }
-                        for (age in Ages.entries) {
+                        Ages.entries.forEach { age ->
+                            val color = viewModel.cellColors[Pair(disease, age)] ?: Color.White
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
                                     .border(1.dp, Gray)
                                     .weight(1f)
+                                    .background(color)
                                     .clickable {
+                                        viewModel.onCellClicked(disease, age)
                                         println("Clicked on $age for $disease")
                                     }
                             )
@@ -131,6 +123,22 @@ fun VaccinationTableScreen(
                     }
                 }
             }
+        }
+    }
+}
+
+@Composable
+fun ResetButton(
+    viewModel: VaccinationTableViewModel
+) {
+    Column {
+        Button(
+            onClick = {
+                viewModel.resetColors()
+                viewModel.reorderDiseases()
+            }
+        ) {
+            Text("Actualizar tabla")
         }
     }
 }
