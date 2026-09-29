@@ -58,6 +58,7 @@ class VaccinationTableViewModel @Inject constructor(): ViewModel() {
     }
 
     fun reorderDiseases() {
+        resetCells()
         _diseasesOrder.shuffle()
     }
 
@@ -65,5 +66,19 @@ class VaccinationTableViewModel @Inject constructor(): ViewModel() {
         val totalCorrectAges = disease.vaccinationSchedule.toSet()
         val correctAgesMarked = correctPerDisease[disease] ?: setOf()
         return totalCorrectAges.all { correctAgesMarked.contains(it) }
+    }
+
+    fun fillCells() {
+        resetCells()
+        Diseases.entries.forEach { disease ->
+            val correctSet = mutableSetOf<Ages>()
+            disease.vaccinationSchedule.forEach { age ->
+                val key = Pair(disease, age)
+                cellStates[key] = true
+                cellColors[key] = Color.Green
+                correctSet.add(age)
+            }
+            correctPerDisease[disease] = correctSet
+        }
     }
 }

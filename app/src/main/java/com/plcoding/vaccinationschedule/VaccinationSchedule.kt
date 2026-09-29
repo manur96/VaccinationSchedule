@@ -4,8 +4,11 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
@@ -19,6 +22,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.plcoding.vaccinationschedule.ui.theme.VaccinationScheduleTheme
+import com.plcoding.vaccinationschedule.ui.theme.lightGrey
 import com.plcoding.vaccinationschedule.vaccinationtable.VaccinationTableScreen
 import com.plcoding.vaccinationschedule.vaccinationtable.VaccinationTableViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -45,7 +49,19 @@ class VaccinationSchedule : ComponentActivity() {
                                             shape = RoundedCornerShape(10.dp)
                                         ),
                                     onClick = {
-                                        viewModel.resetCells()
+                                        viewModel.fillCells()
+                                    }
+                                ) {
+                                    Text("Rellenar")
+                                }
+                                Spacer(modifier = Modifier.width(16.dp))
+                                Button(
+                                    modifier = Modifier
+                                        .border(width = 1.dp,
+                                            color = Color.Black,
+                                            shape = RoundedCornerShape(10.dp)
+                                        ),
+                                    onClick = {
                                         viewModel.reorderDiseases()
                                     }
                                 ) {
